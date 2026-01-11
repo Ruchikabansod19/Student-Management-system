@@ -1,0 +1,2 @@
+# Student-Management-system
+This Python program is a student record management system. It allows the user to add, view, update, and delete student details. All records are stored in a JSON file and managed through a simple menu-driven interface.
