@@ -1,0 +1,132 @@
+import json
+import os
+
+DATA_FILE = "student_data.json"
+
+
+# ---------- Utility Functions ----------
+def read_students():
+    if os.path.isfile(DATA_FILE):
+        with open(DATA_FILE, "r") as f:
+            return json.load(f)
+    return []
+
+
+def write_students(data):
+    with open(DATA_FILE, "w") as f:
+        json.dump(data, f, indent=4)
+
+
+def print_table(records):
+    if len(records) == 0:
+        print("\nNo records available right now.\n")
+        return
+
+    print("\nID".ljust(10), "Name".ljust(20), "Age".ljust(8), "Course".ljust(15))
+    print("-" * 55)
+
+    for record in records:
+        print(
+            str(record["id"]).ljust(10),
+            record["name"].ljust(20),
+            str(record["age"]).ljust(8),
+            record["course"].ljust(15)
+        )
+    print()
+
+
+# ---------- CRUD Operations ----------
+def create_student():
+    students = read_students()
+
+    sid = input("Enter student ID: ").strip()
+    for s in students:
+        if s["id"] == sid:
+            print("This ID already exists. Try a different one.")
+            return
+
+    name = input("Enter student name: ").strip()
+    age = input("Enter age: ").strip()
+    course = input("Enter course name: ").strip()
+
+    if not age.isdigit():
+        print("Age must be a valid number.")
+        return
+
+    students.append({
+        "id": sid,
+        "name": name,
+        "age": int(age),
+        "course": course
+    })
+
+    write_students(students)
+    print("Student record saved successfully!")
+
+
+def show_students():
+    students = read_students()
+    print_table(students)
+
+
+def modify_student():
+    students = read_students()
+    sid = input("Enter student ID to update: ").strip()
+
+    for student in students:
+        if student["id"] == sid:
+            student["name"] = input("New name: ").strip()
+            new_age = input("New age: ").strip()
+            if new_age.isdigit():
+                student["age"] = int(new_age)
+            student["course"] = input("New course: ").strip()
+
+            write_students(students)
+            print("Record updated successfully.")
+            return
+
+    print("Student ID not found.")
+
+
+def remove_student():
+    students = read_students()
+    sid = input("Enter student ID to delete: ").strip()
+
+    updated_list = [s for s in students if s["id"] != sid]
+
+    if len(updated_list) == len(students):
+        print("No matching student found.")
+    else:
+        write_students(updated_list)
+        print("Student record deleted.")
+
+
+# ---------- Main Program ----------
+def run_program():
+    while True:
+        print("\n===== Student Record Management =====")
+        print("1. Add new student")
+        print("2. View all students")
+        print("3. Update student details")
+        print("4. Delete student record")
+        print("5. Exit")
+
+        option = input("Choose an option (1-5): ").strip()
+
+        if option == "1":
+            create_student()
+        elif option == "2":
+            show_students()
+        elif option == "3":
+            modify_student()
+        elif option == "4":
+            remove_student()
+        elif option == "5":
+            print("Thank you for using the system.")
+            break
+        else:
+            print("Invalid choice. Please select between 1 and 5.")
+
+
+if __name__ == "__main__":
+    run_program()

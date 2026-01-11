@@ -1,0 +1,12 @@
+===== Student Record Management =====
+1. Add new student
+2. View all students
+3. Update student details
+4. Delete student record
+5. Exit
+Choose an option (1-5): 1
+Enter student ID: 234
+Enter student name: abc
+Enter age: 20
+Enter course name: xyz
+Student record saved successfully!
